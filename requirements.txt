@@ -1,2 +1,9 @@
 pydantic
-datasets 
+datasets
+Pillow
+numpy
+aiohttp
+huggingface_hub
+pandas
+pyarrow
+requests 
