@@ -253,19 +253,17 @@ async def download_dataset_files(dataset_config: DatasetConfig, output_dir: Path
 
 def extract_dataset_files(dataset_config: DatasetConfig, downloaded_files: List[Path], output_dir: Path):
     """
-    Extract files from downloaded datasets.
-    
-    Args:
-        dataset_config: Dataset configuration
-        downloaded_files: List of downloaded file paths
-        output_dir: Directory to save extracted files
+    Extract files from downloaded datasets and organize them in .cache/{modality}/{media_type}/
     """
     try:
-        extract_dir = output_dir / "extracted" / dataset_config.path.replace("/", "_")
+        # Set up the .cache/{modality}/{media_type}/ directory
+        modality = dataset_config.type.value  # 'image' or 'video'
+        media_type = dataset_config.media_type.value  # 'real', 'synthetic', or 'semisynthetic'
+        extract_dir = Path('./.cache') / modality / media_type
         extract_dir.mkdir(parents=True, exist_ok=True)
-        
-        logging.info(f"Extracting files for {dataset_config.path}")
-        
+
+        logging.info(f"Extracting files for {dataset_config.path} to {extract_dir}")
+
         for file_path in downloaded_files:
             if file_path.suffix.lower() == '.zip':
                 extract_zip_file(file_path, extract_dir, dataset_config)
@@ -276,9 +274,9 @@ def extract_dataset_files(dataset_config: DatasetConfig, downloaded_files: List[
                 import shutil
                 dest_path = extract_dir / file_path.name
                 shutil.copy2(file_path, dest_path)
-        
+
         logging.info(f"Extraction completed for {dataset_config.path}")
-        
+
     except Exception as e:
         logging.error(f"Failed to extract {dataset_config.path}: {e}")
 
