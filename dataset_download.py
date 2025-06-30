@@ -7,7 +7,6 @@ import asyncio
 import logging
 from typing import List, Optional
 from pathlib import Path
-from datasets import load_dataset
 import huggingface_hub as hf_hub
 import uuid
 
@@ -35,97 +34,97 @@ def get_image_datasets() -> List[DatasetConfig]:
             media_type=MediaType.REAL,
             tags=["frontier"],
         ),
-        DatasetConfig(
-            path="bitmind/bm-real",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-        ),
-        DatasetConfig(
-            path="bitmind/open-image-v7-256",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["diverse"],
-        ),
-        DatasetConfig(
-            path="bitmind/celeb-a-hq",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["faces", "high-quality"],
-        ),
-        DatasetConfig(
-            path="bitmind/ffhq-256",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["faces", "high-quality"],
-        ),
-        DatasetConfig(
-            path="bitmind/MS-COCO-unique-256",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["diverse"],
-        ),
-        DatasetConfig(
-            path="bitmind/AFHQ",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["animals", "high-quality"],
-        ),
-        DatasetConfig(
-            path="bitmind/lfw",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["faces"],
-        ),
-        DatasetConfig(
-            path="bitmind/caltech-256",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["objects", "categorized"],
-        ),
-        DatasetConfig(
-            path="bitmind/caltech-101",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["objects", "categorized"],
-        ),
-        DatasetConfig(
-            path="bitmind/dtd",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["textures"],
-        ),
-        DatasetConfig(
-            path="bitmind/idoc-mugshots-images",
-            type=Modality.IMAGE,
-            media_type=MediaType.REAL,
-            tags=["faces"],
-        ),
-        # Synthetic image datasets
-        DatasetConfig(
-            path="bitmind/JourneyDB",
-            type=Modality.IMAGE,
-            media_type=MediaType.SYNTHETIC,
-            tags=["midjourney"],
-        ),
-        DatasetConfig(
-            path="bitmind/GenImage_MidJourney",
-            type=Modality.IMAGE,
-            media_type=MediaType.SYNTHETIC,
-            tags=["midjourney"],
-        ),
-        DatasetConfig(
-            path="bitmind/bm-aura-imagegen",
-            type=Modality.IMAGE,
-            media_type=MediaType.SYNTHETIC,
-            tags=["sora"],
-        ),
-        # Semisynthetic image datasets
-        DatasetConfig(
-            path="bitmind/face-swap",
-            type=Modality.IMAGE,
-            media_type=MediaType.SEMISYNTHETIC,
-            tags=["faces", "manipulated"],
-        ),
+        # DatasetConfig(
+        #     path="bitmind/bm-real",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/open-image-v7-256",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["diverse"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/celeb-a-hq",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["faces", "high-quality"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/ffhq-256",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["faces", "high-quality"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/MS-COCO-unique-256",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["diverse"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/AFHQ",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["animals", "high-quality"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/lfw",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["faces"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/caltech-256",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["objects", "categorized"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/caltech-101",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["objects", "categorized"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/dtd",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["textures"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/idoc-mugshots-images",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.REAL,
+        #     tags=["faces"],
+        # ),
+        # # Synthetic image datasets
+        # DatasetConfig(
+        #     path="bitmind/JourneyDB",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.SYNTHETIC,
+        #     tags=["midjourney"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/GenImage_MidJourney",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.SYNTHETIC,
+        #     tags=["midjourney"],
+        # ),
+        # DatasetConfig(
+        #     path="bitmind/bm-aura-imagegen",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.SYNTHETIC,
+        #     tags=["sora"],
+        # ),
+        # # Semisynthetic image datasets
+        # DatasetConfig(
+        #     path="bitmind/face-swap",
+        #     type=Modality.IMAGE,
+        #     media_type=MediaType.SEMISYNTHETIC,
+        #     tags=["faces", "manipulated"],
+        # ),
     ]
 
 
@@ -142,28 +141,28 @@ def get_video_datasets() -> List[DatasetConfig]:
             tags=["frontier"],
             compressed_format="zip",
         ),
-        DatasetConfig(
-            path="shangxd/imagenet-vidvrd",
-            type=Modality.VIDEO,
-            media_type=MediaType.REAL,
-            tags=["diverse"],
-            compressed_format="zip",
-        ),
-        DatasetConfig(
-            path="nkp37/OpenVid-1M",
-            type=Modality.VIDEO,
-            media_type=MediaType.REAL,
-            tags=["diverse", "large-zips"],
-            compressed_format="zip",
-        ),
-        # Semisynthetic video datasets
-        DatasetConfig(
-            path="bitmind/semisynthetic-video",
-            type=Modality.VIDEO,
-            media_type=MediaType.SEMISYNTHETIC,
-            tags=["faces"],
-            compressed_format="zip",
-        ),
+        # DatasetConfig(
+        #     path="shangxd/imagenet-vidvrd",
+        #     type=Modality.VIDEO,
+        #     media_type=MediaType.REAL,
+        #     tags=["diverse"],
+        #     compressed_format="zip",
+        # ),
+        # DatasetConfig(
+        #     path="nkp37/OpenVid-1M",
+        #     type=Modality.VIDEO,
+        #     media_type=MediaType.REAL,
+        #     tags=["diverse", "large-zips"],
+        #     compressed_format="zip",
+        # ),
+        # # Semisynthetic video datasets
+        # DatasetConfig(
+        #     path="bitmind/semisynthetic-video",
+        #     type=Modality.VIDEO,
+        #     media_type=MediaType.SEMISYNTHETIC,
+        #     tags=["faces"],
+        #     compressed_format="zip",
+        # ),
     ]
 
 
@@ -243,7 +242,7 @@ async def download_dataset_files(dataset_config: DatasetConfig, output_dir: Path
                     valid_files.append(file_path)
             
             logging.info(f"Successfully downloaded {len(valid_files)} valid files for {dataset_config.path}")
-            return valid_files
+            return valid_files, dataset_dir
         
         return []
         
@@ -260,7 +259,7 @@ def extract_dataset_files(dataset_config: DatasetConfig, downloaded_files: List[
         # Set up the .cache/{modality}/{media_type}/ directory
         modality = dataset_config.type.value  # 'image' or 'video'
         media_type = dataset_config.media_type.value  # 'real', 'synthetic', or 'semisynthetic'
-        extract_dir = Path('./.cache') / modality / media_type
+        extract_dir = Path('./.cache') / modality / media_type / dataset_config.path.replace("/", "_")
         extract_dir.mkdir(parents=True, exist_ok=True)
 
         logging.info(f"Extracting files for {dataset_config.path} to {extract_dir}")
@@ -367,12 +366,14 @@ async def download_and_extract_dataset(dataset_config: DatasetConfig, output_dir
         logging.info(f"Processing dataset: {dataset_config.path}")
         
         # Download files
-        downloaded_files = await download_dataset_files(dataset_config, output_dir)
+        downloaded_files, dataset_dir = await download_dataset_files(dataset_config, output_dir)
         
         if downloaded_files:
             # Extract files
             extract_dataset_files(dataset_config, downloaded_files, output_dir)
             logging.info(f"Successfully processed {dataset_config.path}")
+            import shutil
+            shutil.rmtree(dataset_dir)
         else:
             logging.warning(f"No files downloaded for {dataset_config.path}")
             
