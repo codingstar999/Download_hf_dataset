@@ -7,7 +7,6 @@ import asyncio
 import sys
 import time
 
-from bitmind.types import FileType
 
 
 def get_most_recent_update_time(directory: Path) -> float:

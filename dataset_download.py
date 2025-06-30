@@ -9,6 +9,7 @@ from typing import List, Optional
 from pathlib import Path
 from datasets import load_dataset
 import huggingface_hub as hf_hub
+import uuid
 
 from dataset_type import Modality, MediaType, DatasetConfig
 from download import download_files, list_hf_files
@@ -282,21 +283,30 @@ def extract_dataset_files(dataset_config: DatasetConfig, downloaded_files: List[
 
 
 def extract_zip_file(zip_path: Path, extract_dir: Path, dataset_config: DatasetConfig):
-    """Extract contents of a zip file."""
+    """Extract contents of a zip file, saving files with random names."""
     try:
         import zipfile
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_dir)
+            for member in zip_ref.namelist():
+                # Only extract files (not directories)
+                if not member.endswith('/'):
+                    ext = Path(member).suffix or ''
+                    random_name = f"{uuid.uuid4().hex}{ext}"
+                    out_path = extract_dir / random_name
+                    with zip_ref.open(member) as source, open(out_path, 'wb') as target:
+                        target.write(source.read())
         logging.info(f"Extracted {zip_path.name}")
     except Exception as e:
         logging.error(f"Failed to extract {zip_path}: {e}")
 
 
 def extract_parquet_file(parquet_path: Path, extract_dir: Path, dataset_config: DatasetConfig):
-    """Extract images from a parquet file."""
+    """Extract images from a parquet file, saving with random names."""
     try:
         import pandas as pd
         import pyarrow.parquet as pq
+        from PIL import Image
+        import numpy as np
         
         # Read parquet file
         df = pq.read_table(parquet_path).to_pandas()
@@ -314,14 +324,14 @@ def extract_parquet_file(parquet_path: Path, extract_dir: Path, dataset_config: 
                 image_data = row[col]
                 if image_data is not None:
                     try:
+                        random_name = f"{uuid.uuid4().hex}.jpg"
+                        image_path = extract_dir / random_name
                         # Handle different image formats
                         if hasattr(image_data, 'save'):
                             # PIL Image
-                            image_path = extract_dir / f"image_{i:06d}_{col}.jpg"
                             image_data.save(image_path, "JPEG")
                         elif isinstance(image_data, bytes):
                             # Raw bytes
-                            image_path = extract_dir / f"image_{i:06d}_{col}.jpg"
                             with open(image_path, 'wb') as f:
                                 f.write(image_data)
                         elif isinstance(image_data, str):
@@ -329,8 +339,13 @@ def extract_parquet_file(parquet_path: Path, extract_dir: Path, dataset_config: 
                             import shutil
                             src_path = Path(image_data)
                             if src_path.exists():
-                                dst_path = extract_dir / f"image_{i:06d}_{col}{src_path.suffix}"
+                                ext = src_path.suffix or ''
+                                random_name = f"{uuid.uuid4().hex}{ext}"
+                                dst_path = extract_dir / random_name
                                 shutil.copy2(src_path, dst_path)
+                        elif isinstance(image_data, np.ndarray):
+                            pil_image = Image.fromarray(image_data)
+                            pil_image.save(image_path, "JPEG")
                     except Exception as e:
                         logging.warning(f"Failed to save image {i} from column {col}: {e}")
         
